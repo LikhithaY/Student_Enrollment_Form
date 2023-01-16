@@ -23,7 +23,7 @@ and open the template in the editor.
             <form id='stuform' method='get'>
                 <div class='form-group'>
                     <label>Roll No:</label>
-                    <input type='text'id='stdid' class='form-control' on='getStud()'>
+                    <input type='text'id='stdid' class='form-control' onchange='getStud()'>
                 </div>
                 <div class='form-group'>
                      <label>Full Name: </label>
@@ -46,9 +46,9 @@ and open the template in the editor.
                     <input type='date'id='edate' class='form-control'>
                 </div>
                 <div class='fom-group text-center'>
-                <button type='button' class='btn btn-lg btn-primary' id='save' onclick='saveData()' disabled>Save</button>
-                <button type='button' class='btn btn-lg btn-primary' id='change' onclick='changeData()' disabled>Change</button>
-                <button type='button' class='btn btn-lg btn-primary' id='reset' onclick='resetForm()' disabled>Reset</button>
+                    <button type='button' class='btn btn-lg btn-primary' id='save' onclick='saveData()' disabled>Save</button>
+                    <button type='button' class='btn btn-lg btn-primary' id='change' onclick='changeData()' disabled>Change</button>
+                    <button type='button' class='btn btn-lg btn-primary' id='reset' onclick='resetForm()' disabled>Reset</button>
                 </div>
             </form>
         </div>
