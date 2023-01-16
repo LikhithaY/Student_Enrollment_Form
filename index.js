@@ -3,13 +3,38 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-var jpdbBaseURL='http://api.login2explore.com:5577'
-var jpdbIML='/api/iml'
-var jpdbIRL='/api/irl'
-var studDBName='SCHOOL_DB'
-var studRelName='STUDENT-TABLE'
+var jpdbBaseURL='http://api.login2explore.com:5577';
+var jpdbIML='/api/iml';
+var jpdbIRL='/api/irl';
+var studDBName='SCHOOL_DB';
+var studRelName='STUDENT_TABLE';
+var connToken = '90932420|-31949269709508499|90955709';
 
 $('#stdid').focus();
+
+function saveRecNo2LS(resJsonObj) {
+    var lvData = JSON.parse(jsonObj.data);
+    localStorage.setItem('recno', lvData.rec_no);
+
+}
+
+function getStdIdAsJsonObj(){
+    var stdid = $('#stdid').val();
+    var jsonStr = {
+        id: stdid
+    };
+    return JSON.stringify(jsonStr);
+}
+
+function fillData(jsonObj) {
+    saveRecNo2LS(jsonObj);
+    var record = JSON.parse(jsonObj.data).record;
+    $('#stdname').val(record.name);
+    $('#class').val(record.class);
+    $('#bdate').val(record.bdate);
+    $('#address').val(record.address);
+    $('#edate').val(record.edate); 
+}
 
 function resetForm(){
     $('#stdid').val("");
@@ -67,21 +92,43 @@ function validateData(){
     
 }
 
+function getStud(){
+    var stdIdJsonObj = getStdIdAsJsonObj();
+    var getRequest = createGET_BY_KEYRequest(connToken, stdDBName, stdRelationName, stdIdJsonObj);
+    jQuery.ajaxSetup({async: false});
+    var getRequest = executeCommandAtGivenBaseUrl(getRequest, jpdbBaseURL, jpdbIRL);
+    jQuery.ajaxSetup({async : true});
+    if(resJsonObj.status === 400) {
+        $('#save').prop('disabled', false);
+        $('#reset').prop('disabled', false);
+        $('#stdname').focus();
+    }
+    else if (resJsonObj.status === 200){
+
+        $('#stdid').prop('disabled',true);
+        fillData(resJsonObj);
+
+        $('#change').prop('disabled',false);
+        $('#reset').prop('disabled', false);
+        $('#stdid').focus();
+    }
+}
+
 function saveData(){
-    var jsonStrobj= validateDate();
+    var jsonStrobj = validateDate();
     if(jsonStrobj === ''){
         return "";
     }
-    var putRequest= createPUTRequest(connToken,jsonStrobj,studDBName,studRelName);
+    var putRequest = createPUTRequest(connToken,jsonStrobj,studDBName,studRelName);
     jquery.ajaxSetup({async : False});
-    var resJsonObj= executeCommandAtGivenBaseUrl(putRequest,jpdbBaseURL,jpdbIML);
+    var resJsonObj = executeCommandAtGivenBaseUrl(putRequest,jpdbBaseURL,jpdbIML);
     jquery.ajaxSetup({async : True});
     console.log(resJsonObj);
     resetForm();
     $('#stdid').focus();
     
 }
-var jsonStrobj={
+var jsonStrobj = {
    id:stuid,
    name:stdname,
    class:c1,
